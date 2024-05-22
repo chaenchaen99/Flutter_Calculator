@@ -1,14 +1,7 @@
-import 'package:calculator_basic_starter/data/repository/calculator.dart';
-import 'package:calculator_basic_starter/data/source/calculator.dart';
-import 'package:calculator_basic_starter/data/source/local/calculator.dart';
 import 'package:calculator_basic_starter/domain/entity/calculator.dart';
-import 'package:calculator_basic_starter/domain/repository/calculator.dart';
 import 'package:calculator_basic_starter/domain/use_case/fetch_calculator.dart';
 import 'package:calculator_basic_starter/domain/use_case/save_calculator.dart';
-import 'package:calculator_basic_starter/ui/screen/calculator.dart';
-import 'package:calculator_basic_starter/util/formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CalculatorViewModel extends ValueNotifier<CalculatorEntity> {
   final FetchCalculatorUseCase _fetchCalculatorUserCase;

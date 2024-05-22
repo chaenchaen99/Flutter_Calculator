@@ -6,6 +6,7 @@ import 'package:calculator_basic_starter/ui/widget/calculator_board.dart';
 import 'package:calculator_basic_starter/ui/widget/calculator_button.dart';
 import 'package:calculator_basic_starter/util/util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CalculatorScreen extends StatefulWidget {
@@ -16,28 +17,11 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  final ICalculatorLocalDataSource _calculatorLocalDataSource =
-      CalculatorLocalDataSource();
-  late final CalculatorDataSource _calculatorDataSource =
-      CalculatorDataSource(_calculatorLocalDataSource);
-  late final CalculatorRepository _calculatorRepository =
-      CalculatorRepository(_calculatorDataSource);
-  late final FetchCalculatorUseCase _fetchCalculatorUseCase =
-      FetchCalculatorUseCase(_calculatorRepository);
-  late final SaveCalculatorUseCase _saveCalculatorUseCase =
-      SaveCalculatorUseCase(_calculatorRepository);
-
-  late final CalculatorViewModel _viewModel = CalculatorViewModel(
-    CalculatorEntity(),
-    _fetchCalculatorUseCase,
-    _saveCalculatorUseCase,
-  );
-
   @override
   void initState() {
     //위젯 트리가 완전히 구성된 이후에 _viewModel.load() 메서드가 실행되어, initState()에서 발생할 수 있는 에러를 방지할 수 있다.
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _viewModel.load();
+      await context.read<CalculatorViewModel>().load();
     });
     super.initState();
   }
@@ -50,7 +34,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         title: const Text('Calculator'),
       ),
       body: ValueListenableBuilder<CalculatorEntity>(
-        valueListenable: _viewModel,
+        valueListenable: context.read<CalculatorViewModel>(),
         builder: (context, calculator, child) => Column(
           children: [
             CalculatorBoard(number: calculator.result),
@@ -200,10 +184,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   Future<void> _perform(String buttonText, {bool save = false}) async {
-    _viewModel.calculate(buttonText);
+    context.read<CalculatorViewModel>().calculate(buttonText);
 
     if (save) {
-      await _viewModel.save();
+      await context.read<CalculatorViewModel>().save();
     }
   }
 }
