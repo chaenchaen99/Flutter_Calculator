@@ -1,4 +1,6 @@
+import 'package:calculator_basic_starter/data/data.dart';
 import 'package:calculator_basic_starter/data/repository/calculator.dart';
+import 'package:calculator_basic_starter/domain/domain.dart';
 import 'package:calculator_basic_starter/presentation/view_model/calculator.dart';
 import 'package:calculator_basic_starter/ui/widget/calculator_board.dart';
 import 'package:calculator_basic_starter/ui/widget/calculator_button.dart';
@@ -14,10 +16,21 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-  final CalculatorViewModel _viewModel = CalculatorViewModel(
+  final ICalculatorLocalDataSource _calculatorLocalDataSource =
+      CalculatorLocalDataSource();
+  late final CalculatorDataSource _calculatorDataSource =
+      CalculatorDataSource(_calculatorLocalDataSource);
+  late final CalculatorRepository _calculatorRepository =
+      CalculatorRepository(_calculatorDataSource);
+  late final FetchCalculatorUseCase _fetchCalculatorUseCase =
+      FetchCalculatorUseCase(_calculatorRepository);
+  late final SaveCalculatorUseCase _saveCalculatorUseCase =
+      SaveCalculatorUseCase(_calculatorRepository);
+
+  late final CalculatorViewModel _viewModel = CalculatorViewModel(
     CalculatorEntity(),
-    FetchCalculatorUseCase(),
-    SaveCalculatorUseCase(),
+    _fetchCalculatorUseCase,
+    _saveCalculatorUseCase,
   );
 
   @override

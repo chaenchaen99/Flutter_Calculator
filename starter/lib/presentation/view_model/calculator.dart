@@ -1,6 +1,10 @@
 import 'package:calculator_basic_starter/data/repository/calculator.dart';
 import 'package:calculator_basic_starter/data/source/calculator.dart';
 import 'package:calculator_basic_starter/data/source/local/calculator.dart';
+import 'package:calculator_basic_starter/domain/entity/calculator.dart';
+import 'package:calculator_basic_starter/domain/repository/calculator.dart';
+import 'package:calculator_basic_starter/domain/use_case/fetch_calculator.dart';
+import 'package:calculator_basic_starter/domain/use_case/save_calculator.dart';
 import 'package:calculator_basic_starter/ui/screen/calculator.dart';
 import 'package:calculator_basic_starter/util/formatter.dart';
 import 'package:flutter/material.dart';
@@ -18,27 +22,14 @@ class CalculatorViewModel extends ValueNotifier<CalculatorEntity> {
   }
 
   Future<void> save() async {
-    await _saveCalculatorUseCase.execute(value);
+    final SaveCalculatorParams params = SaveCalculatorParams(
+      entity: value,
+    );
+    await _saveCalculatorUseCase.execute(params);
   }
 
   void calculate(String buttonText) {
     value.calculate(buttonText);
     notifyListeners();
-  }
-}
-
-class FetchCalculatorUseCase {
-  Future<CalculatorEntity> execute() {
-    return CalculatorRepository(
-            CalculatorDataSource(CalculatorLocalDataSource()))
-        .fetch();
-  }
-}
-
-class SaveCalculatorUseCase {
-  Future<void> execute(CalculatorEntity entity) {
-    return CalculatorRepository(
-            CalculatorDataSource(CalculatorLocalDataSource()))
-        .save(entity);
   }
 }
