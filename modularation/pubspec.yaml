@@ -1,0 +1,22 @@
+name: modularization_final
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: 3.2.6
+  flutter: 3.16.9
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: 1.0.6
+
+  modularization_domain_final:
+    path: domain
+  modularization_presentation_final:
+    path: presentation
+  modularization_ui_final:
+    path: ui
+
+dev_dependencies:
+  flutter_lints: 3.0.1
